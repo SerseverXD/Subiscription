@@ -3,14 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iOS Style Dark Pricing Cards</title>
+<title>iOS Style Dark Pricing Cards with Sliding Banner</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* Base Styles */
+  /* Global Styles */
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', Arial, sans-serif; }
-  body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #121212; padding: 20px; color: #fff; padding-bottom: 100px; /* Space for the banner */ }
+  body { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    background: #121212; 
+    padding: 20px; 
+    color: #fff; 
+  }
 
-  /* Card Layout */
+  /* Main Card Container */
   .cards {
     display: flex;
     flex-direction: column;
@@ -18,9 +26,11 @@
     width: 100%;
     max-width: 500px;
   }
-  @media (min-width: 600px) { .cards { flex-direction: row; } }
+  @media (min-width: 600px) { 
+    .cards { flex-direction: row; } 
+  }
 
-  /* Individual Card Styling */
+  /* Card Base Style */
   .card {
     background: #1e1e1e;
     border-radius: 25px;
@@ -31,13 +41,21 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    pointer-events: none;
+    pointer-events: none; /* disable card interactivity */
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
   }
 
-  /* Icon Wrapper (Same as before) */
-  .icon-wrapper { position: relative; width: 120px; height: 80px; margin-bottom: 20px; }
+  /* Icon common styles */
+  .icon-wrapper {
+    position: relative;
+    height: 80px;
+    margin-bottom: 20px;
+  }
 
-  /* Dark Plan Icon */
+  /* Dark plan icon */
   .dark .center-icon {
     width: 80px;
     height: 80px;
@@ -45,10 +63,9 @@
     border-radius: 20px;
   }
 
-  /* Unlimited Plan (5 Icons) */
+  /* Unlimited plan icons stacked with depth */
   .unlimited .icon-wrapper {
-    width: 220px;
-    height: 80px;
+    width: 220px; /* Increased width for 5 icons */
   }
   .unlimited img {
     position: absolute;
@@ -56,21 +73,23 @@
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 20px; 
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    transition: transform 0.3s, z-index 0.3s, opacity 0.3s;
+    transition: transform 0.3s, z-index 0.3s;
   }
-  .unlimited .far-left { left: 0; transform: translateX(-40px) scale(0.8); z-index: 0; opacity: 0.8; }
-  .unlimited .left { left: 30px; transform: translateX(-20px) scale(0.9); z-index: 1; opacity: 0.9; }
+  /* 5 Icon Positions and Depth (Z-index/Scale) */
+  .unlimited .far-left { left: 0; transform: translateX(-40px) scale(0.8); z-index: 0; opacity: 0.7; }
+  .unlimited .left { left: 30px; transform: translateX(-20px) scale(0.9); z-index: 1; opacity: 0.85; }
   .unlimited .center { left: 50%; transform: translateX(-50%) scale(1); z-index: 2; opacity: 1; }
-  .unlimited .right { right: 30px; transform: translateX(20px) scale(0.9); z-index: 1; opacity: 0.9; }
-  .unlimited .far-right { right: 0; transform: translateX(40px) scale(0.8); z-index: 0; opacity: 0.8; }
+  .unlimited .right { right: 30px; transform: translateX(20px) scale(0.9); z-index: 1; opacity: 0.85; }
+  .unlimited .far-right { right: 0; transform: translateX(40px) scale(0.8); z-index: 0; opacity: 0.7; }
 
-  /* Text and Button Styles */
-  h2 { font-size: 1.5rem; margin-bottom: 10px; text-transform: capitalize; }
-  p { font-size: 1rem; margin-bottom: 20px; color: #ccc; text-transform: capitalize; }
+  h2 { font-size: 1.5rem; margin-bottom: 10px; }
+  p { font-size: 1rem; margin-bottom: 20px; color: #ccc; }
+
+  /* Call-to-Action Button */
   .price-btn {
-    pointer-events: auto;
+    pointer-events: auto; /* enable only buttons */
     background: #007aff;
     color: #fff;
     border: none;
@@ -79,81 +98,100 @@
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.1s;
+    box-shadow: 0 5px 15px rgba(0, 122, 255, 0.4);
   }
-  .price-btn:hover { background: #005bbb; }
+  .price-btn:hover { background: #005bbb; transform: translateY(-1px); }
+  .price-btn:active { transform: translateY(1px); }
+
+  /* --- AD BANNER STYLES (New) --- */
+  .ad-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px; /* Standard banner height */
+    background: rgba(30, 30, 30, 0.95); /* Dark background to match theme */
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.7);
+    z-index: 99999;
+    /* Initial state (off-screen) */
+    transform: translateY(100%);
+    transition: transform 0.5s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .ad-banner.show {
+    transform: translateY(0); /* Slide up state */
+  }
+
+  /* Ad Iframe Wrapper - ensuring the ad is responsive inside the banner height */
+  .ad-content-wrapper {
+    width: 100%;
+    max-width: 468px; /* Max width for a typical banner format */
+    height: 60px;
+    margin: auto;
+    display: block;
+  }
+
+  .ad-content-wrapper iframe {
+      border: 0;
+      padding: 0;
+      width: 100% !important; /* Override inline width to fill wrapper */
+      height: 100% !important; /* Override inline height to fill wrapper */
+      overflow: hidden;
+      display: block;
+      margin: auto;
+  }
+
+  /* --- MESSAGE BOX (Alert Replacement) --- */
+  .message-box {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: #2a2a2a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, top 0.3s;
+    z-index: 100000;
+    font-size: 0.9rem;
+  }
+  .message-box.show {
+    opacity: 1;
+    visibility: visible;
+    top: 30px;
+    transform: translateX(-50%) translateY(0);
+  }
 
   @media (max-width: 500px) {
+    /* Adjust icon spacing for smaller screens */
     .unlimited .far-left { transform: translateX(-30px) scale(0.75); }
     .unlimited .left { transform: translateX(-15px) scale(0.85); }
     .unlimited .center { transform: translateX(-50%) scale(0.95); }
     .unlimited .right { transform: translateX(15px) scale(0.85); }
     .unlimited .far-right { transform: translateX(30px) scale(0.75); }
-    body { padding-bottom: 70px; /* Adjust padding for smaller banner on mobile */ }
   }
-
-
-  /* ---------------------- AD BANNER STYLES ---------------------- */
-
-  #ad-banner-wrapper {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    /* Banner size placeholder height */
-    height: 80px; 
-    background: rgba(30, 30, 30, 0.95);
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
-    z-index: 99999;
-    /* Initially off-screen */
-    transform: translateY(100%); 
-    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth, slightly bouncy transition */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Slide-up state */
-  #ad-banner-wrapper.slide-up {
-    transform: translateY(0);
-  }
-
-  /* Ad content container, constrained for banner size */
-  #frame {
-    width: 95%; /* Max width on mobile */
-    max-width: 728px; /* Max standard banner width */
-    height: 70px; /* Constrain internal ad content height */
-    margin: auto;
-    position: relative;
-    z-index: 99998;
-    overflow: hidden;
-  }
-
-  /* Styling for the iframe inside the ad container */
-  #frame iframe {
-    width: 100% !important; /* Override inline 70% width for better banner fit */
-    height: 100% !important; /* Ensure it fills the fixed height */
-    overflow: hidden;
-  }
-
-  @media (max-width: 500px) {
-    #ad-banner-wrapper {
-      height: 50px; /* Smaller banner height for mobile */
-    }
-    #frame {
-      height: 40px;
-    }
-  }
-
 </style>
 </head>
 <body>
 
+<!-- Non-blocking Message Box -->
+<div id="messageBox" class="message-box"></div>
+
 <div class="cards">
   <!-- Dark Plan -->
   <div class="card dark">
-    <div class="icon-wrapper">
-      <img src="immage1.png" alt="Dark Icon" class="center-icon">
+    <div class="icon-wrapper" style="width: 80px;">
+      <img src="immage1.png" alt="Dark Icon" class="center-icon" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1a1a1a/cccccc?text=D'">
     </div>
     <h2>Dark</h2>
     <p>Accesso completo solo a Dark</p>
@@ -163,12 +201,11 @@
   <!-- Unlimited Plan -->
   <div class="card unlimited">
     <div class="icon-wrapper">
-      <!-- 5 icons for the enhanced stack effect -->
-      <img src="immage4.png" alt="Far Left Icon" class="far-left">
-      <img src="immage2.png" alt="Left Icon" class="left">
-      <img src="immage1.png" alt="Center Icon" class="center">
-      <img src="immage3.png" alt="Right Icon" class="right">
-      <img src="immage5.png" alt="Far Right Icon" class="far-right">
+      <img src="immage4.png" alt="Far Left Icon" class="far-left" onerror="this.onerror=null;this.src='https://placehold.co/80x80/222222/cccccc?text=A'">
+      <img src="immage2.png" alt="Left Icon" class="left" onerror="this.onerror=null;this.src='https://placehold.co/80x80/222222/cccccc?text=B'">
+      <img src="immage1.png" alt="Center Icon" class="center" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1a1a1a/cccccc?text=C'">
+      <img src="immage3.png" alt="Right Icon" class="right" onerror="this.onerror=null;this.src='https://placehold.co/80x80/222222/cccccc?text=D'">
+      <img src="immage5.png" alt="Far Right Icon" class="far-right" onerror="this.onerror=null;this.src='https://placehold.co/80x80/222222/cccccc?text=E'">
     </div>
     <h2>Unlimited Plan</h2>
     <p>Get Full Access To All Channels</p>
@@ -176,33 +213,50 @@
   </div>
 </div>
 
-<!-- Sliding Ad Banner (Fixed Position at Bottom) -->
-<div id="ad-banner-wrapper">
-  <!-- User's Ad Content (Adjusted for Banner Size) -->
-  <div id="frame">
-    <iframe data-aa='2416442' src='//acceptable.a-ads.com/2416442/?size=Adaptive'                    
-    style='border:0; padding:0; width:100%; height:100%; overflow:hidden;display: block;margin: auto'></iframe>
-  </div>
+<!-- Ad Banner at the bottom that slides up -->
+<div id="adBanner" class="ad-banner">
+    <div id="frame" class="ad-content-wrapper">
+        <iframe 
+            data-aa='2417447' 
+            src='//acceptable.a-ads.com/2417447/?size=Adaptive'
+            title="External Ad Content"
+            style='border:0; padding:0; width:100%; height:100%; overflow:hidden; display: block; margin: auto;'></iframe>
+    </div>
 </div>
 
 <script>
-  // Add alert functionality to buttons (as in original code)
-  const buttons = document.querySelectorAll('.price-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Use a custom modal or message box instead of alert()
-        console.log(`You selected ${btn.textContent} plan!`);
-    });
-  });
+  /**
+   * Replaces alert() with a custom, non-blocking message box.
+   */
+  function showMessage(text) {
+    const msgBox = document.getElementById('messageBox');
+    msgBox.textContent = text;
+    msgBox.classList.add('show');
+    // Hide the message after 3 seconds
+    setTimeout(() => {
+      msgBox.classList.remove('show');
+    }, 3000);
+  }
 
-  // Function to slide the ad banner up on page load
-  window.onload = function() {
-    const adBanner = document.getElementById('ad-banner-wrapper');
-    if (adBanner) {
-        // Add the class to trigger the CSS transition
-        adBanner.classList.add('slide-up');
-    }
-  };
+  // Event Listeners and Initialization
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Setup button handlers using the custom message box
+    const buttons = document.querySelectorAll('.price-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        showMessage(`You selected the ${btn.textContent} plan!`);
+      });
+    });
+
+    // 2. Slide up the banner ad when the page finishes loading
+    const adBanner = document.getElementById('adBanner');
+    // Use a small timeout to ensure the CSS transition is visible after initial render
+    setTimeout(() => {
+      if (adBanner) {
+        adBanner.classList.add('show');
+      }
+    }, 100);
+  });
 </script>
 
 </body>
