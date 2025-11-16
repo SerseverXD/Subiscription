@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ios style dark pricing cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', Arial, sans-serif; }
+  body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #121212; padding: 20px; color: #fff; }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 500px;
+  }
+  @media (min-width: 600px) { .cards { flex-direction: row; } }
+
+  .card {
+    background: #1e1e1e;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    padding: 30px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    pointer-events: none; /* disable card interactivity */
+  }
+
+  /* icons for cards */
+  .icon-wrapper {
+    position: relative;
+    width: 120px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+
+  /* dark plan icon */
+  .dark .center-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 20px; /* curved ios style */
+  }
+
+  /* unlimited plan icons stacked with depth */
+  .unlimited .icon-wrapper {
+    width: 220px; /* Increased width to accommodate more icons */
+    height: 80px;
+  }
+  .unlimited img {
+    position: absolute;
+    top: 0;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 20px; /* ios curved */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: transform 0.3s, z-index 0.3s;
+  }
+  .unlimited .far-left { left: 0; transform: translateX(-40px) scale(0.8); z-index: 0; opacity: 0.8; } /* New icon */
+  .unlimited .left { left: 30px; transform: translateX(-20px) scale(0.9); z-index: 1; opacity: 0.9; }
+  .unlimited .center { left: 50%; transform: translateX(-50%) scale(1); z-index: 2; opacity: 1; }
+  .unlimited .right { right: 30px; transform: translateX(20px) scale(0.9); z-index: 1; opacity: 0.9; }
+  .unlimited .far-right { right: 0; transform: translateX(40px) scale(0.8); z-index: 0; opacity: 0.8; } /* New icon */
+
+  h2 { font-size: 1.5rem; margin-bottom: 10px; }
+  p { font-size: 1rem; margin-bottom: 20px; color: #ccc; }
+
+  .price-btn {
+    pointer-events: auto; /* enable only buttons */
+    background: #007aff;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .price-btn:hover { background: #005bbb; }
+
+  @media (max-width: 500px) {
+    .unlimited .far-left { transform: translateX(-30px) scale(0.75); }
+    .unlimited .left { transform: translateX(-15px) scale(0.85); }
+    .unlimited .center { transform: translateX(-50%) scale(0.95); }
+    .unlimited .right { transform: translateX(15px) scale(0.85); }
+    .unlimited .far-right { transform: translateX(30px) scale(0.75); }
+  }
+</style>
+</head>
+<body>
+
+<div class="cards">
+  <div class="card dark">
+    <div class="icon-wrapper">
+      <img src="immage1.png" alt="dark icon" class="center-icon">
+    </div>
+    <h2>dark</h2>
+    <p>accesso completo solo a dark</p>
+    <button class="price-btn">€0,09</button>
+  </div>
+
+  <div class="card unlimited">
+    <div class="icon-wrapper">
+      <img src="immage4.png" alt="far left icon" class="far-left">
+      <img src="immage2.png" alt="left icon" class="left">
+      <img src="immage1.png" alt="center icon" class="center">
+      <img src="immage3.png" alt="right icon" class="right">
+      <img src="immage5.png" alt="far right icon" class="far-right">
+    </div>
+    <h2>unlimited plan</h2>
+    <p>get full access to all channels</p>
+    <button class="price-btn">€0,19</button>
+  </div>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.price-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => alert(`You selected ${btn.textContent} plan!`));
+  });
+</script>
+
+</body>
+</html>
+
