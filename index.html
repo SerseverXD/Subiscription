@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ios style dark pricing cards</title>
+<title>iOS Style Dark Pricing Cards</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  /* Base Styles */
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', Arial, sans-serif; }
-  body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #121212; padding: 20px; color: #fff; }
+  body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #121212; padding: 20px; color: #fff; padding-bottom: 100px; /* Space for the banner */ }
 
+  /* Card Layout */
   .cards {
     display: flex;
     flex-direction: column;
@@ -18,6 +20,7 @@
   }
   @media (min-width: 600px) { .cards { flex-direction: row; } }
 
+  /* Individual Card Styling */
   .card {
     background: #1e1e1e;
     border-radius: 25px;
@@ -28,28 +31,23 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    pointer-events: none; /* disable card interactivity */
+    pointer-events: none;
   }
 
-  /* icons for cards */
-  .icon-wrapper {
-    position: relative;
-    width: 120px;
-    height: 80px;
-    margin-bottom: 20px;
-  }
+  /* Icon Wrapper (Same as before) */
+  .icon-wrapper { position: relative; width: 120px; height: 80px; margin-bottom: 20px; }
 
-  /* dark plan icon */
+  /* Dark Plan Icon */
   .dark .center-icon {
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 20px; /* curved ios style */
+    border-radius: 20px;
   }
 
-  /* unlimited plan icons stacked with depth */
+  /* Unlimited Plan (5 Icons) */
   .unlimited .icon-wrapper {
-    width: 220px; /* Increased width to accommodate more icons */
+    width: 220px;
     height: 80px;
   }
   .unlimited img {
@@ -58,21 +56,21 @@
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 20px; /* ios curved */
+    border-radius: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    transition: transform 0.3s, z-index 0.3s;
+    transition: transform 0.3s, z-index 0.3s, opacity 0.3s;
   }
-  .unlimited .far-left { left: 0; transform: translateX(-40px) scale(0.8); z-index: 0; opacity: 0.8; } /* New icon */
+  .unlimited .far-left { left: 0; transform: translateX(-40px) scale(0.8); z-index: 0; opacity: 0.8; }
   .unlimited .left { left: 30px; transform: translateX(-20px) scale(0.9); z-index: 1; opacity: 0.9; }
   .unlimited .center { left: 50%; transform: translateX(-50%) scale(1); z-index: 2; opacity: 1; }
   .unlimited .right { right: 30px; transform: translateX(20px) scale(0.9); z-index: 1; opacity: 0.9; }
-  .unlimited .far-right { right: 0; transform: translateX(40px) scale(0.8); z-index: 0; opacity: 0.8; } /* New icon */
+  .unlimited .far-right { right: 0; transform: translateX(40px) scale(0.8); z-index: 0; opacity: 0.8; }
 
-  h2 { font-size: 1.5rem; margin-bottom: 10px; }
-  p { font-size: 1rem; margin-bottom: 20px; color: #ccc; }
-
+  /* Text and Button Styles */
+  h2 { font-size: 1.5rem; margin-bottom: 10px; text-transform: capitalize; }
+  p { font-size: 1rem; margin-bottom: 20px; color: #ccc; text-transform: capitalize; }
   .price-btn {
-    pointer-events: auto; /* enable only buttons */
+    pointer-events: auto;
     background: #007aff;
     color: #fff;
     border: none;
@@ -91,40 +89,120 @@
     .unlimited .center { transform: translateX(-50%) scale(0.95); }
     .unlimited .right { transform: translateX(15px) scale(0.85); }
     .unlimited .far-right { transform: translateX(30px) scale(0.75); }
+    body { padding-bottom: 70px; /* Adjust padding for smaller banner on mobile */ }
   }
+
+
+  /* ---------------------- AD BANNER STYLES ---------------------- */
+
+  #ad-banner-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* Banner size placeholder height */
+    height: 80px; 
+    background: rgba(30, 30, 30, 0.95);
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+    /* Initially off-screen */
+    transform: translateY(100%); 
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth, slightly bouncy transition */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Slide-up state */
+  #ad-banner-wrapper.slide-up {
+    transform: translateY(0);
+  }
+
+  /* Ad content container, constrained for banner size */
+  #frame {
+    width: 95%; /* Max width on mobile */
+    max-width: 728px; /* Max standard banner width */
+    height: 70px; /* Constrain internal ad content height */
+    margin: auto;
+    position: relative;
+    z-index: 99998;
+    overflow: hidden;
+  }
+
+  /* Styling for the iframe inside the ad container */
+  #frame iframe {
+    width: 100% !important; /* Override inline 70% width for better banner fit */
+    height: 100% !important; /* Ensure it fills the fixed height */
+    overflow: hidden;
+  }
+
+  @media (max-width: 500px) {
+    #ad-banner-wrapper {
+      height: 50px; /* Smaller banner height for mobile */
+    }
+    #frame {
+      height: 40px;
+    }
+  }
+
 </style>
 </head>
 <body>
 
 <div class="cards">
+  <!-- Dark Plan -->
   <div class="card dark">
     <div class="icon-wrapper">
-      <img src="immage1.png" alt="dark icon" class="center-icon">
+      <img src="immage1.png" alt="Dark Icon" class="center-icon">
     </div>
-    <h2>dark</h2>
-    <p>accesso completo solo a dark</p>
+    <h2>Dark</h2>
+    <p>Accesso completo solo a Dark</p>
     <button class="price-btn">€0,09</button>
   </div>
 
+  <!-- Unlimited Plan -->
   <div class="card unlimited">
     <div class="icon-wrapper">
-      <img src="immage4.png" alt="far left icon" class="far-left">
-      <img src="immage2.png" alt="left icon" class="left">
-      <img src="immage1.png" alt="center icon" class="center">
-      <img src="immage3.png" alt="right icon" class="right">
-      <img src="immage5.png" alt="far right icon" class="far-right">
+      <!-- 5 icons for the enhanced stack effect -->
+      <img src="immage4.png" alt="Far Left Icon" class="far-left">
+      <img src="immage2.png" alt="Left Icon" class="left">
+      <img src="immage1.png" alt="Center Icon" class="center">
+      <img src="immage3.png" alt="Right Icon" class="right">
+      <img src="immage5.png" alt="Far Right Icon" class="far-right">
     </div>
-    <h2>unlimited plan</h2>
-    <p>get full access to all channels</p>
+    <h2>Unlimited Plan</h2>
+    <p>Get Full Access To All Channels</p>
     <button class="price-btn">€0,19</button>
   </div>
 </div>
 
+<!-- Sliding Ad Banner (Fixed Position at Bottom) -->
+<div id="ad-banner-wrapper">
+  <!-- User's Ad Content (Adjusted for Banner Size) -->
+  <div id="frame">
+    <iframe data-aa='2416442' src='//acceptable.a-ads.com/2416442/?size=Adaptive'                    
+    style='border:0; padding:0; width:100%; height:100%; overflow:hidden;display: block;margin: auto'></iframe>
+  </div>
+</div>
+
 <script>
+  // Add alert functionality to buttons (as in original code)
   const buttons = document.querySelectorAll('.price-btn');
   buttons.forEach(btn => {
-    btn.addEventListener('click', () => alert(`You selected ${btn.textContent} plan!`));
+    btn.addEventListener('click', () => {
+        // Use a custom modal or message box instead of alert()
+        console.log(`You selected ${btn.textContent} plan!`);
+    });
   });
+
+  // Function to slide the ad banner up on page load
+  window.onload = function() {
+    const adBanner = document.getElementById('ad-banner-wrapper');
+    if (adBanner) {
+        // Add the class to trigger the CSS transition
+        adBanner.classList.add('slide-up');
+    }
+  };
 </script>
 
 </body>
